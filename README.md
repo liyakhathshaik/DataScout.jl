@@ -30,9 +30,7 @@ Figshare	figshare_search
 Internet Archive	internetarchive_search
 
 
-# Documentation
-Full documentation:
-https://liyakhathshaik.github.io/DataScout.jl
+=
 
 # Need Help?
 Open an issue:
