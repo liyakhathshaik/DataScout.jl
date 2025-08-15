@@ -1,13 +1,16 @@
 module DataScout
 
 using HTTP, JSON3, DataFrames, Dates, TOML
-export search, set_api_key!, get_api_key  
+
 # Core functionality
 include("config.jl")
-include("core.jl")
 include("normalize.jl")
+include("core.jl")
 include("services.jl")
 using .Services
+
+# Export main functions
+export search, set_api_key!, get_api_key
 
 # Service implementations
 service_files = [
@@ -35,12 +38,19 @@ const SERVICE_REGISTRY = Dict{Symbol,Function}(
     :internetarchive => search_internetarchive
 )
 
-export search
-
 function search(query::AbstractString; source::Symbol, max_results::Int=10, kwargs...)
     func = get(SERVICE_REGISTRY, source, nothing)
     func === nothing && throw(ArgumentError("Unsupported source: $source"))
     return func(query; max_results=max_results, kwargs...)
+end
+
+# Convenience functions for API key management
+function set_api_key!(service::Symbol, key::String)
+    Config.set_api_key!(service, key)
+end
+
+function get_api_key(service::Symbol)
+    Config.get_api_key(service)
 end
 
 end # module

@@ -1,7 +1,7 @@
 module Core
 
 using HTTP, Dates, TOML
-import ...Config
+using ..Config
 
 const STATE_LOCK = ReentrantLock()
 const STATE = Dict{Symbol,DateTime}()

@@ -6,7 +6,7 @@ function search_core(query; max_results=10)
     headers = Dict("Authorization" => "Bearer $api_key")
     
     try
-        response = Core.api_request(:core, url; headers)
+        response = Services.Core.api_request(:core, url; headers)
         data = JSON3.read(response)
         
         results = Dict{String, Any}[]

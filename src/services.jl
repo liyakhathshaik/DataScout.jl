@@ -14,6 +14,9 @@ include("services/searxng.jl")
 include("services/whoogle.jl")
 include("services/internetarchive.jl")
 
+# Make Core module available
+using .Core
+
 # Export all search functions
 export search_core, search_openalex, search_zenodo, search_figshare,
        search_gutenberg, search_openlibrary, search_wikipedia,
