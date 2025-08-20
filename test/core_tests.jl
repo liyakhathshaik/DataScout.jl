@@ -34,17 +34,16 @@ Mocking.activate()
 
     @testset "Rate Limiting" begin
         # Test that rate limiting doesn't break functionality
-        patch = @patch function HTTP.get(url::String; headers=Dict())
-            return HTTP.Response(200, "test")
-        end
-
-        apply(patch) do
+        DataScout.Services.Core.set_http_get!((url::String; headers=Dict()) -> HTTP.Response(200, "test"))
+        try
             start_time = now()
             DataScout.Services.Core.api_request(:test_rate, "http://example.com")
             DataScout.Services.Core.api_request(:test_rate, "http://example.com")
             elapsed = (now() - start_time).value / 1000
             # Should have some delay due to rate limiting
             @test elapsed >= 0
+        finally
+            DataScout.Services.Core.reset_http_handlers!()
         end
     end
 end
