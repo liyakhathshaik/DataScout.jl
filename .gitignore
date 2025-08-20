@@ -12,6 +12,7 @@ desktop.ini
 *.cov
 *.mem
 lcov.info
+Manifest.toml
 
 ## Logs and temp files
 *.log
