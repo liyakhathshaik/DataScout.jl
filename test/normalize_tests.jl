@@ -55,6 +55,17 @@ using DataFrames
         
         df_numeric = DataScout.Normalize.dict_to_dataframe(numeric_id)
         @test df_numeric.id[1] == "12345"
+
+        # Test float ID conversion
+        float_id = [Dict(
+            "title" => "Float",
+            "url" => "https://example.com",
+            "authors" => ["A"],
+            "source" => "Test",
+            "id" => 123.45
+        )]
+        df_float = DataScout.Normalize.dict_to_dataframe(float_id)
+        @test df_float.id[1] == "123.45"
     end
 
     @testset "handle_authors Function" begin

@@ -10,8 +10,21 @@ function search_gutenberg(query; max_results=10)
         for item in data["results"]
             count >= max_results && break
             # Prioritize text/plain download links
-            text_links = filter(f -> occursin("text/plain", f["mime_type"]), item["formats"])
-            download_url = isempty(text_links) ? first(item["formats"])["url"] : first(text_links)["url"]
+            # Gutendex returns a dict of format => url
+            download_url = let formats = get(item, "formats", Dict{String,Any}())
+                selected = missing
+                for k in keys(formats)
+                    if occursin("text/plain", String(k))
+                        selected = formats[k]
+                        break
+                    end
+                end
+                if ismissing(selected)
+                    isempty(formats) ? missing : first(values(formats))
+                else
+                    selected
+                end
+            end
             
             authors = isempty(item["authors"]) ? missing : [a["name"] for a in item["authors"]]
             push!(results, Dict(

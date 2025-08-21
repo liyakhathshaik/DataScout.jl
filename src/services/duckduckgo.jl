@@ -9,8 +9,8 @@ function search_duckduckgo(query; max_results=10)
         # DuckDuckGo returns one primary result + related topics
         if !isempty(data["Results"])
             push!(results, Dict(
-                "title" => get(data["Heading"], missing),
-                "url" => get(data["AbstractURL"], missing),
+                "title" => get(data, "Heading", missing),
+                "url" => get(data, "AbstractURL", missing),
                 "authors" => missing,
                 "source" => "DuckDuckGo",
                 "id" => missing

@@ -1,7 +1,7 @@
 name = "DataScout"
 uuid = "76d43509-2e9a-4ef2-8ba2-502f21f4bec7"
 authors = ["liyakhathshaik <liyakhath0409@gmail.com>"]
-version = "0.1.1"
+version = "0.1.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"

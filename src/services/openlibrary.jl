@@ -6,15 +6,23 @@ function search_openlibrary(query; max_results=10)
         data = JSON3.read(response)
         
         results = Dict{String,Any}[]
-        for doc in data["docs"]
+        for doc in get(data, "docs", Any[])
             authors = if haskey(doc, "author_name")
-                doc["author_name"]
+                # Normalize to Vector{String}
+                try
+                    collect(String, doc["author_name"])
+                catch
+                    missing
+                end
             else
                 missing
             end
             push!(results, Dict(
                 "title" => get(doc, "title", missing),
-                "url" => "https://openlibrary.org/works/$(get(doc, "key", ""))",
+                "url" => begin
+                    work_key = get(doc, "key", "")
+                    isempty(String(work_key)) ? missing : "https://openlibrary.org/works/$(work_key)"
+                end,
                 "authors" => authors,
                 "source" => "Open Library",
                 "id" => get(doc, "key", missing)

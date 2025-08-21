@@ -8,13 +8,21 @@ function search_zenodo(query; max_results=10)
         results = Dict{String,Any}[]
         for item in data["hits"]["hits"]
             authors = if haskey(item["metadata"], "creators")
-                [c.name for c in item["metadata"]["creators"]]
+                [get(c, "name", missing) for c in item["metadata"]["creators"]]
             else
                 missing
             end
             push!(results, Dict(
                 "title" => get(item["metadata"], "title", missing),
-                "url" => get(item, "doi", missing) ? "https://doi.org/$(item["doi"])" : get(item, "links", Dict())["html"],
+                "url" => begin
+                    # Prefer DOI if present and non-empty, fall back to HTML link
+                    doi_val = get(item, "doi", nothing)
+                    if doi_val isa String && !isempty(doi_val)
+                        "https://doi.org/$(doi_val)"
+                    else
+                        get(get(item, "links", Dict()), "html", missing)
+                    end
+                end,
                 "authors" => authors,
                 "source" => "Zenodo",
                 "id" => get(item, "id", missing)

@@ -38,7 +38,7 @@ function dict_to_dataframe(results::Vector{<:AbstractDict})
     return df
 end
 
-handle_authors(x::Vector) = isempty(x) ? missing : x
+handle_authors(x::AbstractVector) = isempty(x) ? missing : [String(a) for a in x]
 handle_authors(x::AbstractString) = [x]
 handle_authors(::Missing) = missing
 
